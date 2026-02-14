@@ -1,0 +1,15 @@
+{
+  "name": "chakbut",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:client": "cd \"Infertility Treatment Tracker\" && npm install",
+    "install:server": "cd server && npm install",
+    "postinstall": "npm run install:client && npm run install:server",
+    "build:client": "cd \"Infertility Treatment Tracker\" && npm run build",
+    "build:server": "cd server && npm run build",
+    "build": "npm run build:client && cp -r \"Infertility Treatment Tracker/dist\" server/client && npm run build:server",
+    "start": "node server/dist/index.js",
+    "migrate": "cd server && npm run migrate"
+  }
+}
