@@ -6,7 +6,7 @@ import Login from './pages/Login';
 import MyPage from './pages/MyPage';
 import ProfileEdit from './pages/ProfileEdit';
 import OAuthKakaoCallback from './pages/OAuthKakaoCallback';
-import OAuthGoogleCallback from './pages/OAuthGoogleCallback';
+import Terms from './pages/Terms';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('auth_token');
@@ -24,8 +24,8 @@ export const router = createBrowserRouter([
     Component: OAuthKakaoCallback,
   },
   {
-    path: '/oauth/google',
-    Component: OAuthGoogleCallback,
+    path: '/terms',
+    element: <ProtectedRoute><Terms /></ProtectedRoute>,
   },
   {
     path: '/',

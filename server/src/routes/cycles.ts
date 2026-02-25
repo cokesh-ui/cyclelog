@@ -19,15 +19,15 @@ cyclesRouter.get('/', async (req: AuthRequest, res) => {
 // POST /api/cycles — 새 사이클 생성
 cyclesRouter.post('/', async (req: AuthRequest, res) => {
   try {
-    const { cycleNumber, subtitle, startDate } = req.body;
+    const { cycleNumber, subtitle, startDate, cycleType } = req.body;
     if (!cycleNumber || !startDate) {
       res.status(400).json({ error: '회차와 시작일을 입력해주세요' });
       return;
     }
 
     const result = await pool.query(
-      'INSERT INTO cycles (user_id, cycle_number, subtitle, start_date, title) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [req.userId, cycleNumber, subtitle || null, startDate, `${cycleNumber}차`]
+      'INSERT INTO cycles (user_id, cycle_number, subtitle, start_date, title, cycle_type) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
+      [req.userId, cycleNumber, subtitle || null, startDate, `${cycleNumber}차`, cycleType || 'standard']
     );
 
     const cycle = await getCycleById(result.rows[0].id, req.userId!);
@@ -54,7 +54,7 @@ cyclesRouter.get('/:cycleId', async (req: AuthRequest, res) => {
 // PATCH /api/cycles/:cycleId — 사이클 메타 수정
 cyclesRouter.patch('/:cycleId', async (req: AuthRequest, res) => {
   try {
-    const { cycleNumber, subtitle, title } = req.body;
+    const { cycleNumber, subtitle, title, cycleType, injectionSkipped } = req.body;
     const fields: string[] = [];
     const values: any[] = [];
     let idx = 1;
@@ -62,6 +62,8 @@ cyclesRouter.patch('/:cycleId', async (req: AuthRequest, res) => {
     if (cycleNumber !== undefined) { fields.push(`cycle_number = $${idx++}`); values.push(cycleNumber); }
     if (subtitle !== undefined) { fields.push(`subtitle = $${idx++}`); values.push(subtitle || null); }
     if (title !== undefined) { fields.push(`title = $${idx++}`); values.push(title || null); }
+    if (cycleType !== undefined) { fields.push(`cycle_type = $${idx++}`); values.push(cycleType); }
+    if (injectionSkipped !== undefined) { fields.push(`injection_skipped = $${idx++}`); values.push(injectionSkipped); }
 
     if (fields.length === 0) {
       res.status(400).json({ error: '수정할 항목이 없습니다' });

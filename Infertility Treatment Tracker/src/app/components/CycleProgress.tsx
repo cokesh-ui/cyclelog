@@ -5,13 +5,16 @@ import { useRef, useEffect } from 'react';
 interface CycleProgressProps {
   cycle: Cycle;
   compact?: boolean; // CycleList에서 사용할 때는 compact 모드
+  shrink?: boolean; // 스크롤 시 축소 모드
+  hideInjection?: boolean; // CycleList 카드에서 과배란/내막준비 숨기기
   onStepClick?: (step: string) => void;
 }
 
-export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProgressProps) {
-  // culture 데이터 가져오기 (호환성)
-  const cultureData = cycle.culture || cycle.day5 || cycle.day3;
-  
+export function CycleProgress({ cycle, compact = false, shrink = false, hideInjection = false, onStepClick }: CycleProgressProps) {
+  const cultureData = cycle.culture;
+  const hasInjections = cycle.injections.length > 0 || cycle.injectionSkipped;
+  const isTransferOnly = cycle.cycleType === 'transfer_only';
+
   // 스크롤 컨테이너 ref
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   
@@ -38,14 +41,14 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
   ) => {
     if (!shouldShow) return null;
 
-    const colorClasses = color || 'from-pink-500 to-purple-500';
-    const size = compact ? 'w-10 h-10 text-base' : 'w-12 h-12 text-lg';
-    const minWidth = compact ? 'min-w-[50px]' : 'min-w-[60px]';
-    const fontSize = compact ? 'text-[10px]' : 'text-xs';
+    const colorClasses = color || 'from-orange-500 to-amber-500';
+    const size = compact ? 'w-10 h-10 text-base' : shrink ? 'w-9 h-9 text-[15px]' : 'w-[50px] h-[50px] text-lg';
+    const minWidth = compact ? 'min-w-[50px]' : shrink ? 'min-w-[44px]' : 'min-w-[56px]';
+    const fontSize = compact ? 'text-[10px]' : shrink ? 'text-[10px]' : 'text-xs';
     
     if (isCompleted) {
       return (
-        <div className={`flex flex-col items-center gap-2 ${minWidth} group relative`}>
+        <div className={`flex flex-col items-center ${shrink ? 'gap-1' : 'gap-2'} ${minWidth} group relative`}>
           <button
             onClick={() => stepKey && handleStepClick(stepKey)}
             className={`${size} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br ${colorClasses} ${
@@ -62,7 +65,7 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
     }
 
     return (
-      <div className={`flex flex-col items-center gap-2 ${minWidth}`}>
+      <div className={`flex flex-col items-center ${shrink ? 'gap-1' : 'gap-2'} ${minWidth}`}>
         <button
           onClick={() => stepKey && handleStepClick(stepKey)}
           className={`${size} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gray-300 ${
@@ -81,24 +84,41 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
   return (
     <div className="relative">
       {/* 연결선 배경 */}
-      {!compact && (
-        <div className="absolute top-8 left-[35px] right-0 h-0.5 bg-gradient-to-r from-pink-200 via-purple-200 to-pink-200"></div>
-      )}
       {compact && (
-        <div className="absolute top-6 left-[28px] right-0 h-0.5 bg-gradient-to-r from-pink-200 via-purple-200 to-pink-200"></div>
+        <div className="absolute top-6 left-[28px] right-0 h-0.5 bg-gradient-to-r from-orange-200 via-amber-200 to-orange-200"></div>
       )}
-      
-      <div className={`relative flex items-start ${compact ? 'gap-2' : 'gap-2.5'} overflow-x-auto pb-2 pt-2 px-1`} ref={scrollContainerRef}>
-        {/* 과배란 (주사 기록) */}
-        {renderStep(
+      {!compact && shrink && (
+        <div className="absolute top-[20px] left-[22px] right-0 h-0.5 bg-gradient-to-r from-orange-200 via-amber-200 to-orange-200"></div>
+      )}
+      {!compact && !shrink && (
+        <div className="absolute top-[27px] left-[30px] right-0 h-0.5 bg-gradient-to-r from-orange-200 via-amber-200 to-orange-200"></div>
+      )}
+
+      <div className={`relative flex items-start ${shrink ? 'gap-1' : 'gap-2'} overflow-x-auto ${shrink ? 'pb-1 pt-1' : 'pb-2 pt-2'} px-1 transition-all duration-200`} ref={scrollContainerRef}>
+        {/* 주사 기록 - 건너뛰기는 미진행 상태로 표시 */}
+        {!hideInjection && renderStep(
           cycle.injections.length > 0,
-          '과배란',
+          isTransferOnly ? '내막준비' : '과배란',
           undefined,
           undefined,
           'injection',
           true
         )}
 
+        {isTransferOnly ? (
+          <>
+            {/* 이식만: 과배란 → 이식 */}
+            {renderStep(
+              !!cycle.transfer,
+              '이식',
+              cycle.transfer?.transferCount,
+              'from-green-400 to-emerald-500',
+              'transfer',
+              hasInjections
+            )}
+          </>
+        ) : (
+          <>
         {/* 채취 */}
         {renderStep(
           !!cycle.retrieval,
@@ -106,7 +126,7 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
           cycle.retrieval?.totalEggs,
           undefined,
           'retrieval',
-          cycle.injections.length > 0
+          hasInjections
         )}
 
         {/* 수정 */}
@@ -134,34 +154,17 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
           <>
             {/* 이식 */}
             {cycle.transfer && cycle.transfer.transferCount > 0 && (
-              <div className={`flex flex-col items-center gap-2 ${compact ? 'min-w-[50px]' : 'min-w-[60px]'} group relative`}>
+              <div className={`flex flex-col items-center ${shrink ? 'gap-1' : 'gap-2'} ${compact ? 'min-w-[50px]' : shrink ? 'min-w-[44px]' : 'min-w-[56px]'} group relative`}>
                 <button
                   onClick={() => handleStepClick('culture')}
-                  className={`${compact ? 'w-10 h-10 text-base' : 'w-12 h-12 text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-green-400 to-emerald-500 ${
+                  className={`${compact ? 'w-10 h-10 text-base' : shrink ? 'w-9 h-9 text-[15px]' : 'w-[50px] h-[50px] text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-green-400 to-emerald-500 ${
                     onStepClick ? 'cursor-pointer active:scale-95 transition-transform' : ''
                   } relative z-10`}
                 >
                   {cycle.transfer.transferCount}
                 </button>
-                <span className={`${compact ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
+                <span className={`${compact ? 'text-[10px]' : shrink ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
                   이식
-                </span>
-              </div>
-            )}
-
-            {/* 동결 */}
-            {cycle.freeze && cycle.freeze.frozenCount > 0 && (
-              <div className={`flex flex-col items-center gap-2 ${compact ? 'min-w-[50px]' : 'min-w-[60px]'} group relative`}>
-                <button
-                  onClick={() => handleStepClick('culture')}
-                  className={`${compact ? 'w-10 h-10 text-base' : 'w-12 h-12 text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-blue-400 to-cyan-500 ${
-                    onStepClick ? 'cursor-pointer active:scale-95 transition-transform' : ''
-                  } relative z-10`}
-                >
-                  {cycle.freeze.frozenCount}
-                </button>
-                <span className={`${compact ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
-                  동결
                 </span>
               </div>
             )}
@@ -171,7 +174,7 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
               <>
                 {/* 정배수 (Euploid) - 축하 효과 */}
                 {cycle.pgt.euploid > 0 && (
-                  <div className={`flex flex-col items-center gap-2 ${compact ? 'min-w-[50px]' : 'min-w-[60px]'} group relative`}>
+                  <div className={`flex flex-col items-center ${shrink ? 'gap-1' : 'gap-2'} ${compact ? 'min-w-[50px]' : shrink ? 'min-w-[44px]' : 'min-w-[56px]'} group relative`}>
                     {/* 반짝이는 배경 효과 */}
                     <motion.div
                       className="absolute inset-0"
@@ -185,13 +188,13 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
                         ease: "easeInOut",
                       }}
                     >
-                      <div className={`${compact ? 'w-10 h-10' : 'w-12 h-12'} rounded-full bg-green-300 blur-sm`}></div>
+                      <div className={`${compact ? 'w-10 h-10' : shrink ? 'w-9 h-9' : 'w-[50px] h-[50px]'} rounded-full bg-green-300 blur-sm`}></div>
                     </motion.div>
 
                     {/* 메인 버튼 */}
                     <motion.button
                       onClick={() => handleStepClick('pgt')}
-                      className={`${compact ? 'w-10 h-10 text-base' : 'w-12 h-12 text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-green-400 to-emerald-500 ${
+                      className={`${compact ? 'w-10 h-10 text-base' : shrink ? 'w-9 h-9 text-[15px]' : 'w-[50px] h-[50px] text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-green-400 to-emerald-500 ${
                         onStepClick ? 'cursor-pointer active:scale-95 transition-transform' : ''
                       } relative z-10`}
                       animate={{
@@ -210,30 +213,49 @@ export function CycleProgress({ cycle, compact = false, onStepClick }: CycleProg
                     >
                       {cycle.pgt.euploid}
                     </motion.button>
-                    <span className={`${compact ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
-                      정배수
+                    <span className={`${compact ? 'text-[10px]' : shrink ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
+                      PGT통과
                     </span>
                   </div>
                 )}
 
                 {/* 모자이크 (Mosaic) */}
                 {cycle.pgt.mosaic !== undefined && cycle.pgt.mosaic > 0 && (
-                  <div className={`flex flex-col items-center gap-2 ${compact ? 'min-w-[50px]' : 'min-w-[60px]'} group relative`}>
+                  <div className={`flex flex-col items-center ${shrink ? 'gap-1' : 'gap-2'} ${compact ? 'min-w-[50px]' : shrink ? 'min-w-[44px]' : 'min-w-[56px]'} group relative`}>
                     <button
                       onClick={() => handleStepClick('pgt')}
-                      className={`${compact ? 'w-10 h-10 text-base' : 'w-12 h-12 text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-yellow-400 to-amber-500 ${
+                      className={`${compact ? 'w-10 h-10 text-base' : shrink ? 'w-9 h-9 text-[15px]' : 'w-[50px] h-[50px] text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-yellow-400 to-amber-500 ${
                         onStepClick ? 'cursor-pointer active:scale-95 transition-transform' : ''
                       } relative z-10`}
                     >
                       {cycle.pgt.mosaic}
                     </button>
-                    <span className={`${compact ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
+                    <span className={`${compact ? 'text-[10px]' : shrink ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
                       모자이크
                     </span>
                   </div>
                 )}
               </>
             )}
+
+            {/* 동결 */}
+            {cycle.freeze && cycle.freeze.frozenCount > 0 && (
+              <div className={`flex flex-col items-center ${shrink ? 'gap-1' : 'gap-2'} ${compact ? 'min-w-[50px]' : shrink ? 'min-w-[44px]' : 'min-w-[56px]'} group relative`}>
+                <button
+                  onClick={() => handleStepClick('culture')}
+                  className={`${compact ? 'w-10 h-10 text-base' : shrink ? 'w-9 h-9 text-[15px]' : 'w-[50px] h-[50px] text-lg'} rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-blue-400 to-cyan-500 ${
+                    onStepClick ? 'cursor-pointer active:scale-95 transition-transform' : ''
+                  } relative z-10`}
+                >
+                  {cycle.freeze.frozenCount}
+                </button>
+                <span className={`${compact ? 'text-[10px]' : shrink ? 'text-[10px]' : 'text-xs'} text-gray-700 font-medium whitespace-nowrap`}>
+                  동결
+                </span>
+              </div>
+            )}
+          </>
+        )}
           </>
         )}
       </div>

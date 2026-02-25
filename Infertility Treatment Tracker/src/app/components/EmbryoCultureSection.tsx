@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Edit2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Edit2, ChevronDown, ChevronUp, FlaskConical } from 'lucide-react';
 import { EmbryoCultureRecord } from '../types';
+import { useScrollOnOpen } from '../hooks/useScrollOnOpen';
 
 interface EmbryoCultureSectionProps {
   culture?: EmbryoCultureRecord;
@@ -11,8 +12,9 @@ interface EmbryoCultureSectionProps {
 }
 
 export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showPlanModal, onClosePlanModal }: EmbryoCultureSectionProps) {
-  const [isOpen, setIsOpen] = useState(!culture); // 입력되지 않았으면 펼쳐진 상태
+  const [isOpen, setIsOpen] = useState(!culture);
   const [isEditing, setIsEditing] = useState(!culture);
+  const sectionRef = useScrollOnOpen(isOpen, isEditing);
   const [showModal, setShowModal] = useState(false);
   const [savedFormData, setSavedFormData] = useState<EmbryoCultureRecord | null>(null);
   
@@ -36,7 +38,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // 배아 수가 0개인 경우 팝업 없이 바로 저장
     if (formData.totalEmbryos === 0) {
       onUpdate({
@@ -51,8 +53,27 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
       setIsOpen(false);
       return;
     }
-    
-    // 배아 수가 1개 이상인 경우 다음 단계 선택 팝업 표시
+
+    // 이미 다음 계획이 설정되어 있으면 팝업 없이 바로 저장
+    if (culture && culture.nextPlans && culture.nextPlans.length > 0) {
+      const oldPlans = culture.nextPlans;
+      const newPlans = formData.nextPlans || oldPlans;
+      const removedPlans = oldPlans.filter(plan => !newPlans.includes(plan));
+
+      onUpdate({
+        ...formData,
+        gradeA: formData.gradeA || undefined,
+        gradeB: formData.gradeB || undefined,
+        gradeC: formData.gradeC || undefined,
+        memo: formData.memo || undefined,
+        nextPlans: newPlans,
+      }, removedPlans.length > 0 ? removedPlans : undefined);
+      setIsEditing(false);
+      setIsOpen(false);
+      return;
+    }
+
+    // 첫 입력이고 배아 수가 1개 이상인 경우 다음 단계 선택 팝업 표시
     setSavedFormData(formData);
     setShowModal(true);
   };
@@ -112,7 +133,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
   if (!isOpen && !culture) {
     return (
       <>
-        <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
+        <div ref={sectionRef} className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
           <button
             onClick={() => {
               setIsOpen(true);
@@ -120,7 +141,10 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
             }}
             className="w-full flex items-center justify-between active:bg-gray-50 transition-colors rounded -m-1 p-1"
           >
-            <h2 className="text-xl text-gray-700">배양 기록</h2>
+            <div className="flex items-center gap-2">
+              <FlaskConical className="w-5 h-5 text-amber-500" />
+              <h2 className="text-lg font-semibold text-gray-700">배양</h2>
+            </div>
             <ChevronDown className="w-5 h-5 text-gray-400" />
           </button>
         </div>
@@ -152,17 +176,17 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
   if (!isOpen && culture) {
     return (
       <>
-        <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
+        <div ref={sectionRef} className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
           <button
             onClick={() => setIsOpen(true)}
             className="w-full flex items-center justify-between hover:bg-gray-50 transition-colors rounded -m-1 p-1"
           >
-            <div className="flex items-center gap-3">
-              <h2 className="text-xl">배양 기록</h2>
-              <span className="text-sm text-purple-600">{culture.day}일 배아</span>
-              <span className="text-sm text-blue-600">{culture.totalEmbryos}개</span>
-              {culture.nextPlans && culture.nextPlans.length > 0 && (
-                <span className="text-xs text-gray-500">· {getPlanLabels(culture.nextPlans)}</span>
+            <div className="flex items-center gap-2">
+              <FlaskConical className="w-5 h-5 text-amber-500" />
+              <h2 className="text-lg font-semibold">배양</h2>
+              <span className="px-2 py-0.5 bg-amber-50 text-amber-600 text-sm font-bold rounded-full">{culture.day}일 {culture.totalEmbryos}개</span>
+              {culture.memo && (
+                <span className="text-sm text-gray-400 truncate">{culture.memo}</span>
               )}
             </div>
             <ChevronDown className="w-5 h-5 text-gray-400" />
@@ -196,36 +220,43 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
   if (isOpen && !isEditing && culture) {
     return (
       <>
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div ref={sectionRef} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
           <div className="flex items-center justify-between mb-4">
             <button
               onClick={() => setIsOpen(false)}
-              className="flex items-center gap-2 hover:text-gray-900 transition-colors"
+              className="flex items-center gap-2"
             >
-              <h2 className="text-xl">배양 기록</h2>
-              <ChevronUp className="w-5 h-5 text-gray-400" />
+              <FlaskConical className="w-5 h-5 text-amber-500" />
+              <h2 className="text-lg font-semibold">배양</h2>
             </button>
-            <button
-              onClick={() => {
-                setFormData(culture);
-                setIsEditing(true);
-              }}
-              className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded transition-colors"
-            >
-              <Edit2 className="w-4 h-4" />
-              수정
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  setFormData(culture);
+                  setIsEditing(true);
+                }}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <Edit2 className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
+                <ChevronUp className="w-5 h-5" />
+              </button>
+            </div>
           </div>
           <div className="space-y-2">
             <div className="flex justify-between">
               <span className="text-gray-600">배양 일수:</span>
-              <span className="text-purple-600">{culture.day}일</span>
+              <span className="text-amber-600">{culture.day}일</span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-600">배아 수:</span>
               <span className="text-blue-600 font-bold">{culture.totalEmbryos}개</span>
             </div>
-            
+
             {(culture.gradeA !== undefined || culture.gradeB !== undefined || culture.gradeC !== undefined) && (
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <div className="text-sm text-gray-600 mb-2">등급별 수:</div>
@@ -249,16 +280,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
                 )}
               </div>
             )}
-            
-            {culture.nextPlans && culture.nextPlans.length > 0 && (
-              <div className="mt-3 pt-3 border-t border-gray-200">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">다음 계획:</span>
-                  <span className="font-medium">{getPlanLabels(culture.nextPlans)}</span>
-                </div>
-              </div>
-            )}
-            
+
             {culture.memo && (
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <span className="text-gray-600 text-sm">메모:</span>
@@ -267,7 +289,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
             )}
           </div>
         </div>
-        
+
         {/* 다음 계획 선택 모달 */}
         {showModal && (
           <div className="fixed inset-0 backdrop-blur-sm bg-black/30 flex items-center justify-center z-50 p-4">
@@ -295,9 +317,12 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
 
   // 펼쳐진 상태 - 편집 모드
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+    <div ref={sectionRef} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl">배양 기록</h2>
+        <div className="flex items-center gap-2">
+          <FlaskConical className="w-5 h-5 text-amber-500" />
+          <h2 className="text-lg font-semibold">배양</h2>
+        </div>
         {culture && (
           <button
             onClick={() => setIsOpen(false)}
@@ -325,7 +350,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
                 }}
                 className={`px-4 py-2 rounded-lg transition-colors ${
                   formData.day === d
-                    ? 'bg-purple-600 text-white'
+                    ? 'bg-amber-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
@@ -340,7 +365,8 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
           <input
             type="number"
             min="0"
-            value={formData.totalEmbryos || ''}
+            value={formData.totalEmbryos}
+            onFocus={(e) => e.target.select()}
             onChange={(e) => setFormData({ ...formData, totalEmbryos: parseInt(e.target.value) || 0 })}
             className="w-full px-3 py-2 border border-gray-300 rounded"
             placeholder="0"
@@ -359,7 +385,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
               <input
                 type="number"
                 min="0"
-                value={formData.gradeA || ''}
+                value={formData.gradeA ?? ''}
                 onChange={(e) => setFormData({ ...formData, gradeA: e.target.value ? parseInt(e.target.value) : undefined })}
                 className="w-full px-3 py-2 border border-gray-300 rounded"
               />
@@ -369,7 +395,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
               <input
                 type="number"
                 min="0"
-                value={formData.gradeB || ''}
+                value={formData.gradeB ?? ''}
                 onChange={(e) => setFormData({ ...formData, gradeB: e.target.value ? parseInt(e.target.value) : undefined })}
                 className="w-full px-3 py-2 border border-gray-300 rounded"
               />
@@ -379,7 +405,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
               <input
                 type="number"
                 min="0"
-                value={formData.gradeC || ''}
+                value={formData.gradeC ?? ''}
                 onChange={(e) => setFormData({ ...formData, gradeC: e.target.value ? parseInt(e.target.value) : undefined })}
                 className="w-full px-3 py-2 border border-gray-300 rounded"
               />
@@ -415,7 +441,7 @@ export function EmbryoCultureSection({ culture, fertilizedCount, onUpdate, showP
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-all"
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all"
           >
             저장
           </button>
@@ -469,7 +495,7 @@ function PlanSelectionModal({
   return (
     <div className="space-y-4">
       <div className="space-y-3">
-        <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer active:bg-pink-50 active:border-pink-300 transition-all">
+        <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer active:bg-orange-50 active:border-orange-300 transition-all">
           <input
             type="checkbox"
             checked={selectedPlans.includes('transfer')}
@@ -482,7 +508,7 @@ function PlanSelectionModal({
           </div>
         </label>
 
-        <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer active:bg-pink-50 active:border-pink-300 transition-all">
+        <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer active:bg-orange-50 active:border-orange-300 transition-all">
           <input
             type="checkbox"
             checked={selectedPlans.includes('freeze')}
@@ -496,12 +522,12 @@ function PlanSelectionModal({
         </label>
 
         {shouldShowPGT && (
-          <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer active:bg-pink-50 active:border-pink-300 transition-all">
+          <label className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-lg cursor-pointer active:bg-orange-50 active:border-orange-300 transition-all">
             <input
               type="checkbox"
               checked={selectedPlans.includes('pgt')}
               onChange={() => togglePlan('pgt')}
-              className="w-5 h-5 text-purple-600"
+              className="w-5 h-5 text-amber-600"
             />
             <div className="flex-1">
               <div className="font-medium text-gray-900">PGT</div>
@@ -514,13 +540,13 @@ function PlanSelectionModal({
       <div className="flex gap-3 pt-4 border-t border-gray-200">
         <button
           onClick={() => onSelect(undefined)}
-          className="flex-1 px-4 py-3 bg-pink-100 text-pink-600 rounded-lg active:bg-pink-200 transition-colors font-medium"
+          className="flex-1 px-4 py-3 bg-orange-100 text-orange-500 rounded-lg active:bg-orange-200 transition-colors font-medium"
         >
           다음에 입력하기
         </button>
         <button
           onClick={() => onSelect(selectedPlans.length > 0 ? selectedPlans : undefined)}
-          className="flex-1 px-4 py-3 bg-pink-600 text-white rounded-lg active:bg-pink-700 transition-colors font-medium"
+          className="flex-1 px-4 py-3 bg-orange-500 text-white rounded-lg active:bg-orange-600 transition-colors font-medium"
         >
           확인
         </button>

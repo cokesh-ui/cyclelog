@@ -97,9 +97,9 @@ export default function MyPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 pb-8">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 pb-8">
       {/* 헤더 */}
-      <div className="sticky top-0 z-50 bg-white border-b border-pink-100 shadow-sm">
+      <div className="sticky top-0 z-50 bg-white border-b border-orange-100 shadow-sm">
         <div className="max-w-4xl mx-auto px-6 py-3 flex items-center justify-center relative">
           <button onClick={() => navigate(-1)} className="absolute left-4 p-1 text-gray-500">
             <ArrowLeft className="w-5 h-5" />
@@ -110,12 +110,12 @@ export default function MyPage() {
 
       <div className="max-w-4xl mx-auto px-6 pt-6 space-y-4">
         {/* 프로필 카드 */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm border border-pink-100 flex items-center gap-4">
-          <div className="w-14 h-14 rounded-full bg-pink-100 flex items-center justify-center">
+        <div className="bg-white rounded-2xl p-5 shadow-sm border border-orange-100 flex items-center gap-4">
+          <div className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center">
             {user?.profileImage ? (
               <img src={user.profileImage} alt="" className="w-14 h-14 rounded-full object-cover" />
             ) : (
-              <User className="w-7 h-7 text-pink-400" />
+              <User className="w-7 h-7 text-orange-400" />
             )}
           </div>
           <div>
@@ -125,7 +125,7 @@ export default function MyPage() {
         </div>
 
         {/* 메뉴 카드 */}
-        <div className="bg-white rounded-2xl shadow-sm border border-pink-100 divide-y divide-gray-100">
+        <div className="bg-white rounded-2xl shadow-sm border border-orange-100 divide-y divide-gray-100">
           <button
             onClick={() => navigate('/mypage/edit')}
             className="w-full flex items-center justify-between px-5 py-4"
@@ -192,7 +192,7 @@ function MarketingSection({ profile, onUpdate }: { profile: UserProfile; onUpdat
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-pink-100 p-5">
+    <div className="bg-white rounded-2xl shadow-sm border border-orange-100 p-5">
       <h3 className="text-sm font-semibold text-gray-800 mb-3">마케팅 수신 설정</h3>
       <div className="space-y-3">
         {[
@@ -205,7 +205,7 @@ function MarketingSection({ profile, onUpdate }: { profile: UserProfile; onUpdat
             <button
               onClick={() => toggle(key)}
               disabled={saving}
-              className={`relative w-10 h-6 rounded-full transition-colors ${profile[key] ? 'bg-pink-500' : 'bg-gray-300'}`}
+              className={`relative w-10 h-6 rounded-full transition-colors ${profile[key] ? 'bg-orange-500' : 'bg-gray-300'}`}
             >
               <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${profile[key] ? 'translate-x-4' : ''}`} />
             </button>
@@ -242,7 +242,7 @@ function TermsModal({ type, onClose }: { type: string; onClose: () => void }) {
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`flex-1 py-2.5 text-xs font-medium transition-colors ${activeTab === key ? 'text-pink-600 border-b-2 border-pink-600' : 'text-gray-400'}`}
+              className={`flex-1 py-2.5 text-xs font-medium transition-colors ${activeTab === key ? 'text-orange-500 border-b-2 border-orange-500' : 'text-gray-400'}`}
             >
               {label}
             </button>
@@ -258,7 +258,7 @@ function TermsModal({ type, onClose }: { type: string; onClose: () => void }) {
         <div className="p-4 border-t border-gray-100">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-pink-600 text-white rounded-lg font-medium hover:bg-pink-700 transition-colors"
+            className="w-full py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 transition-colors"
           >
             확인
           </button>

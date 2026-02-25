@@ -7,8 +7,8 @@ export function CycleSummary({ cycle }: { cycle: Cycle }) {
     parts.push(`채취 ${cycle.retrieval.totalEggs}개`);
   }
 
-  if (cycle.day5) {
-    parts.push(`5일 ${cycle.day5.totalEmbryos}개`);
+  if (cycle.culture) {
+    parts.push(`${cycle.culture.day}일 ${cycle.culture.totalEmbryos}개`);
   }
 
   if (cycle.pgt) {

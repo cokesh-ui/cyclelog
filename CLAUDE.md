@@ -91,6 +91,23 @@ Sections in `CycleDetail` are conditionally rendered based on what data exists (
 - Theme: pink/purple palette in `src/styles/theme.css`
 - Tailwind v4 source scanning in `src/styles/tailwind.css`
 
+## Development Workflow
+
+코드 변경 시 반드시 아래 순서를 따른다:
+
+1. **빌드 테스트** — `cd "Infertility Treatment Tracker" && npm run build` 및 `cd server && npm run build` 로 빌드 에러 확인
+2. **단위 테스트** — 테스트가 있는 경우 실행하여 통과 확인
+3. **체크리스트 업데이트** — TodoWrite로 완료 항목 체크, 남은 작업 정리
+4. **커밋** — 사용자가 요청한 경우에만 커밋. 빌드/테스트 통과 후 커밋
+
+## Deployment
+
+- **플랫폼:** Railway (단일 서비스로 프론트+백엔드 배포)
+- **GitHub:** `cokesh-ui/cyclelog`
+- **빌드:** 루트 `package.json`의 `npm run build`가 프론트 빌드 → `server/client/`로 복사 → 백엔드 빌드
+- **시작:** `npm run migrate && npm start` (railway.json)
+- **환경변수:** `DATABASE_URL`, `JWT_SECRET`, `NODE_ENV=production`, OAuth 관련 키
+
 ## Key Conventions
 
 - UI text is in **Korean**

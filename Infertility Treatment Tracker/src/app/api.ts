@@ -30,34 +30,17 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 }
 
 // Auth
-export async function signup(
-  email: string, password: string, nickname?: string, birthDate?: string, phone?: string,
-  marketing?: { marketingEmail: boolean; marketingSms: boolean; marketingPush: boolean }
-) {
-  return request<{ token: string; user: { id: string; email: string; nickname: string } }>('/auth/signup', {
-    method: 'POST',
-    body: JSON.stringify({ email, password, nickname, birthDate, phone, ...marketing }),
-  });
-}
-
-export async function login(email: string, password: string) {
-  return request<{ token: string; user: { id: string; email: string; nickname: string } }>('/auth/login', {
-    method: 'POST',
-    body: JSON.stringify({ email, password }),
-  });
-}
-
 export async function kakaoLogin(code: string) {
-  return request<{ token: string; user: { id: string; email: string; nickname: string; profileImage?: string } }>('/auth/kakao', {
+  return request<{ token: string; isNewUser: boolean; user: { id: string; email: string; nickname: string; profileImage?: string } }>('/auth/kakao', {
     method: 'POST',
     body: JSON.stringify({ code }),
   });
 }
 
-export async function googleLogin(code: string) {
-  return request<{ token: string; user: { id: string; email: string; nickname: string; profileImage?: string } }>('/auth/google', {
-    method: 'POST',
-    body: JSON.stringify({ code }),
+export async function agreeTerms(data: { marketingEmail: boolean; marketingSms: boolean; marketingPush: boolean }) {
+  return request<{ message: string }>('/auth/terms', {
+    method: 'PUT',
+    body: JSON.stringify(data),
   });
 }
 
@@ -89,13 +72,6 @@ export async function updateProfile(data: { nickname?: string; phone?: string; b
   });
 }
 
-export async function updatePassword(currentPassword: string, newPassword: string) {
-  return request<{ message: string }>('/auth/password', {
-    method: 'PUT',
-    body: JSON.stringify({ currentPassword, newPassword }),
-  });
-}
-
 export async function updateMarketing(data: { marketingEmail: boolean; marketingSms: boolean; marketingPush: boolean }) {
   return request<{ message: string }>('/auth/marketing', {
     method: 'PUT',
@@ -103,10 +79,9 @@ export async function updateMarketing(data: { marketingEmail: boolean; marketing
   });
 }
 
-export async function deleteAccount(password?: string) {
+export async function deleteAccount() {
   return request<{ message: string }>('/auth/me', {
     method: 'DELETE',
-    body: JSON.stringify({ password }),
   });
 }
 
@@ -119,7 +94,7 @@ export async function fetchCycle(id: string): Promise<Cycle> {
   return request<Cycle>(`/cycles/${id}`);
 }
 
-export async function createCycle(data: { cycleNumber: number; subtitle?: string; startDate: string }): Promise<Cycle> {
+export async function createCycle(data: { cycleNumber: number; subtitle?: string; startDate: string; cycleType?: 'standard' | 'transfer_only' }): Promise<Cycle> {
   return request<Cycle>('/cycles', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -130,6 +105,13 @@ export async function updateCycleMeta(id: string, data: { cycleNumber?: number; 
   return request<Cycle>(`/cycles/${id}`, {
     method: 'PATCH',
     body: JSON.stringify(data),
+  });
+}
+
+export async function skipInjections(cycleId: string): Promise<Cycle> {
+  return request<Cycle>(`/cycles/${cycleId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({ injectionSkipped: true }),
   });
 }
 

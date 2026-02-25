@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Edit2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Edit2, ChevronDown, ChevronUp, Dna } from 'lucide-react';
 import { PGTRecord } from '../types';
+import { useScrollOnOpen } from '../hooks/useScrollOnOpen';
 
 interface PGTSectionProps {
   pgt?: PGTRecord;
@@ -9,8 +10,9 @@ interface PGTSectionProps {
 }
 
 export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
-  const [isOpen, setIsOpen] = useState(!pgt); // 입력되지 않았으면 펼쳐진 상태
+  const [isOpen, setIsOpen] = useState(!pgt);
   const [isEditing, setIsEditing] = useState(!pgt);
+  const sectionRef = useScrollOnOpen(isOpen, isEditing);
   const [formData, setFormData] = useState<PGTRecord>(
     pgt || {
       tested: 0,
@@ -25,7 +27,7 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
     e.preventDefault();
     onUpdate({
       ...formData,
-      mosaic: formData.mosaic || undefined,
+      mosaic: formData.mosaic,
     });
     setIsEditing(false);
     setIsOpen(false);
@@ -34,7 +36,7 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
   // 입력되지 않은 경우 접힌 상태로 표시
   if (!isOpen && !pgt) {
     return (
-      <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
+      <div ref={sectionRef} className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
         <button
           onClick={() => {
             setIsOpen(true);
@@ -42,7 +44,10 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
           }}
           className="w-full flex items-center justify-between active:bg-gray-50 transition-colors rounded -m-1 p-1"
         >
-          <h2 className="text-xl text-gray-700">PGT 결과</h2>
+          <div className="flex items-center gap-2">
+            <Dna className="w-5 h-5 text-emerald-500" />
+            <h2 className="text-lg font-semibold text-gray-700">PGT</h2>
+          </div>
           <ChevronDown className="w-5 h-5 text-gray-400" />
         </button>
       </div>
@@ -52,14 +57,15 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
   // 입력된 경우 접을 수 있는 표시 상태
   if (!isOpen && pgt) {
     return (
-      <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
+      <div ref={sectionRef} className="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
         <button
           onClick={() => setIsOpen(true)}
           className="w-full flex items-center justify-between hover:bg-gray-50 transition-colors rounded -m-1 p-1"
         >
-          <div className="flex items-center gap-3">
-            <h2 className="text-xl">PGT 결과</h2>
-            <span className="text-sm text-green-600">통과 {pgt.euploid}개</span>
+          <div className="flex items-center gap-2">
+            <Dna className="w-5 h-5 text-emerald-500" />
+            <h2 className="text-lg font-semibold">PGT</h2>
+            <span className="px-2 py-0.5 bg-emerald-50 text-emerald-600 text-sm font-bold rounded-full">통과 {pgt.euploid}개</span>
           </div>
           <ChevronDown className="w-5 h-5 text-gray-400" />
         </button>
@@ -70,25 +76,32 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
   // 펼쳐진 상태 - 보기 모드
   if (isOpen && !isEditing && pgt) {
     return (
-      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+      <div ref={sectionRef} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
         <div className="flex items-center justify-between mb-4">
           <button
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2 hover:text-gray-900 transition-colors"
+            className="flex items-center gap-2"
           >
-            <h2 className="text-xl">PGT 결과</h2>
-            <ChevronUp className="w-5 h-5 text-gray-400" />
+            <Dna className="w-5 h-5 text-emerald-500" />
+            <h2 className="text-lg font-semibold">PGT</h2>
           </button>
-          <button
-            onClick={() => {
-              setFormData(pgt);
-              setIsEditing(true);
-            }}
-            className="flex items-center gap-1 px-3 py-1 text-sm text-blue-600 hover:bg-blue-50 rounded transition-colors"
-          >
-            <Edit2 className="w-4 h-4" />
-            수정
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => {
+                setFormData(pgt);
+                setIsEditing(true);
+              }}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <Edit2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <ChevronUp className="w-5 h-5" />
+            </button>
+          </div>
         </div>
         <div className="space-y-2">
           <div className="flex justify-between">
@@ -120,9 +133,12 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
 
   // 펼쳐진 상태 - 편집 모드
   return (
-    <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+    <div ref={sectionRef} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl">PGT 결과</h2>
+        <div className="flex items-center gap-2">
+          <Dna className="w-5 h-5 text-emerald-500" />
+          <h2 className="text-lg font-semibold">PGT</h2>
+        </div>
         {pgt && (
           <button
             onClick={() => setIsOpen(false)}
@@ -138,7 +154,8 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
           <input
             type="number"
             min="0"
-            value={formData.tested || ''}
+            value={formData.tested}
+            onFocus={(e) => e.target.select()}
             onChange={(e) => setFormData({ ...formData, tested: parseInt(e.target.value) || 0 })}
             className="w-full px-3 py-2 border border-gray-300 rounded"
             placeholder="0"
@@ -154,7 +171,8 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
           <input
             type="number"
             min="0"
-            value={formData.euploid || ''}
+            value={formData.euploid}
+            onFocus={(e) => e.target.select()}
             onChange={(e) => setFormData({ ...formData, euploid: parseInt(e.target.value) || 0 })}
             className="w-full px-3 py-2 border border-gray-300 rounded"
             required
@@ -166,7 +184,7 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
           <input
             type="number"
             min="0"
-            value={formData.mosaic || ''}
+            value={formData.mosaic ?? ''}
             onChange={(e) => setFormData({ ...formData, mosaic: e.target.value ? parseInt(e.target.value) : undefined })}
             className="w-full px-3 py-2 border border-gray-300 rounded"
           />
@@ -200,7 +218,7 @@ export function PGTSection({ pgt, embryoCount, onUpdate }: PGTSectionProps) {
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-all"
+            className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-all"
           >
             저장
           </button>

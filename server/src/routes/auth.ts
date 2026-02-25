@@ -4,40 +4,6 @@ import { authMiddleware, AuthRequest } from '../middleware/auth.js';
 
 export const authRouter = Router();
 
-authRouter.post('/signup', async (req, res) => {
-  try {
-    const { email, password, nickname, birthDate, phone, marketingEmail, marketingSms, marketingPush } = req.body;
-    if (!email || !password) {
-      res.status(400).json({ error: '이메일과 비밀번호를 입력해주세요' });
-      return;
-    }
-    if (!birthDate || !phone) {
-      res.status(400).json({ error: '생년월일과 전화번호를 입력해주세요' });
-      return;
-    }
-    const result = await authService.signup(email, password, nickname, birthDate, phone, {
-      marketingEmail, marketingSms, marketingPush,
-    });
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-authRouter.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      res.status(400).json({ error: '이메일과 비밀번호를 입력해주세요' });
-      return;
-    }
-    const result = await authService.login(email, password);
-    res.json(result);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
 authRouter.post('/kakao', async (req, res) => {
   try {
     const { code } = req.body;
@@ -52,14 +18,11 @@ authRouter.post('/kakao', async (req, res) => {
   }
 });
 
-authRouter.post('/google', async (req, res) => {
+// [DEV] 테스트용 — 나중에 삭제
+authRouter.post('/dev-login', async (req, res) => {
   try {
-    const { code } = req.body;
-    if (!code) {
-      res.status(400).json({ error: '인가 코드가 필요합니다' });
-      return;
-    }
-    const result = await authService.googleLogin(code);
+    const { userId } = req.body;
+    const result = await authService.devLogin(userId);
     res.json(result);
   } catch (err: any) {
     res.status(400).json({ error: err.message });
@@ -94,19 +57,11 @@ authRouter.put('/profile', authMiddleware, async (req: AuthRequest, res) => {
   }
 });
 
-authRouter.put('/password', authMiddleware, async (req: AuthRequest, res) => {
+authRouter.put('/terms', authMiddleware, async (req: AuthRequest, res) => {
   try {
-    const { currentPassword, newPassword } = req.body;
-    if (!currentPassword || !newPassword) {
-      res.status(400).json({ error: '현재 비밀번호와 새 비밀번호를 입력해주세요' });
-      return;
-    }
-    if (newPassword.length < 4) {
-      res.status(400).json({ error: '비밀번호는 4자 이상이어야 합니다' });
-      return;
-    }
-    await authService.updatePassword(req.userId!, currentPassword, newPassword);
-    res.json({ message: '비밀번호가 변경되었습니다' });
+    const { marketingEmail, marketingSms, marketingPush } = req.body;
+    await authService.agreeTerms(req.userId!, { marketingEmail, marketingSms, marketingPush });
+    res.json({ message: '약관 동의가 완료되었습니다' });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
   }
@@ -124,8 +79,7 @@ authRouter.put('/marketing', authMiddleware, async (req: AuthRequest, res) => {
 
 authRouter.delete('/me', authMiddleware, async (req: AuthRequest, res) => {
   try {
-    const { password } = req.body;
-    await authService.deleteAccount(req.userId!, password);
+    await authService.deleteAccount(req.userId!);
     res.json({ message: '회원 탈퇴가 완료되었습니다' });
   } catch (err: any) {
     res.status(400).json({ error: err.message });

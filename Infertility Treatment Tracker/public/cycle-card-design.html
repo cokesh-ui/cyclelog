@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사이클 카드 디자인 — 현재 반영</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .label { color: #9ca3af; font-size: 11px; margin-bottom: 16px; font-weight: 600; letter-spacing: 0.05em; }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-orange-50 to-amber-50 min-h-screen p-6">
+
+  <div class="max-w-md mx-auto space-y-10">
+
+    <h1 class="text-center text-lg font-bold text-gray-800 pt-4">사이클 카드 디자인</h1>
+    <p class="text-center text-xs text-gray-400 -mt-8">현재 반영 상태</p>
+
+
+    <!-- ===== 1a. CycleList 카드 — 데이터 있음 ===== -->
+    <div>
+      <div class="label">CYCLE LIST 카드 — 데이터 있음</div>
+
+      <div class="relative bg-white rounded-xl px-5 py-4 shadow-sm border border-orange-100 overflow-hidden">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-orange-500"></div>
+
+        <!-- 상단: 제목, 날짜, 태그 -->
+        <div class="flex items-center justify-between mb-3 pl-3">
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-3">
+              <div class="text-lg font-semibold">15회</div>
+              <div class="text-sm text-gray-500">2026-02-20</div>
+            </div>
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="text-xs text-gray-400">#서울성모</span>
+              <span class="text-xs text-gray-400">#장기프로토콜</span>
+            </div>
+          </div>
+          <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </div>
+
+        <!-- 처방약 정보 -->
+        <div class="mb-2 pl-3">
+          <div class="flex items-center gap-1 text-xs text-gray-500 mb-2">
+            <svg class="w-3.5 h-3.5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg>
+            처방약
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-lg text-sm">
+              <span class="font-medium">퓨어곤</span>
+              <span class="text-gray-600">11</span>
+            </div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-orange-50 rounded-lg text-sm">
+              <span class="font-medium">가니렐릭스</span>
+              <span class="text-gray-600">5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 숫자 흐름 요약 -->
+        <div class="pl-3">
+          <div class="relative">
+            <div class="absolute top-6 left-[28px] right-0 h-0.5 bg-gradient-to-r from-orange-200 via-amber-200 to-orange-200"></div>
+            <div class="relative flex items-start gap-2 pb-2 pt-2 px-1">
+              <div class="flex flex-col items-center gap-2 min-w-[50px]">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-orange-500 to-amber-500 text-base relative z-10">4</div>
+                <span class="text-[10px] text-gray-700 font-medium">채취</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 min-w-[50px]">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-orange-500 to-amber-500 text-base relative z-10">2</div>
+                <span class="text-[10px] text-gray-700 font-medium">수정</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 min-w-[50px]">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-orange-500 to-amber-500 text-base relative z-10">2</div>
+                <span class="text-[10px] text-gray-700 font-medium">5일</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 min-w-[50px]">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-blue-400 to-cyan-500 text-base relative z-10">1</div>
+                <span class="text-[10px] text-gray-700 font-medium">동결</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 min-w-[50px]">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-green-400 to-emerald-500 text-base relative z-10">1</div>
+                <span class="text-[10px] text-gray-700 font-medium">PGT통과</span>
+              </div>
+              <div class="flex flex-col items-center gap-2 min-w-[50px]">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold shadow-lg bg-gradient-to-br from-yellow-400 to-amber-500 text-base relative z-10">1</div>
+                <span class="text-[10px] text-gray-700 font-medium">모자이크</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===== 1b. CycleList 카드 — 데이터 없음 (빈 사이클) ===== -->
+    <div>
+      <div class="label">CYCLE LIST 카드 — 데이터 없음</div>
+
+      <div class="relative bg-white rounded-xl px-5 py-4 shadow-sm border border-orange-100 overflow-hidden">
+        <div class="absolute left-0 top-0 bottom-0 w-1 bg-orange-500"></div>
+
+        <div class="flex items-center justify-between pl-3">
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-3">
+              <div class="text-lg font-semibold">16회</div>
+              <div class="text-sm text-gray-500">2026-02-22</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-sm text-gray-400">사이클로그를 입력하세요</span>
+            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        <!-- 상태표시 라인 없음 -->
+      </div>
+    </div>
+
+
+    <!-- ===== 2. CycleDetail 처방 섹션 (접힌 상태) ===== -->
+    <div>
+      <div class="label">처방 섹션 — 접힌 상태</div>
+
+      <div class="bg-white rounded-lg p-5 shadow-sm border border-gray-200">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2 min-w-0">
+            <svg class="w-5 h-5 text-pink-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg>
+            <span class="text-lg font-semibold flex-shrink-0">처방</span>
+            <span class="text-sm text-pink-600 truncate">퓨어곤, 가니렐릭스, 오비드렐</span>
+          </div>
+          <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===== 3. 현재: 처방 섹션 펼쳐진 상태 (글자 작음) ===== -->
+    <div>
+      <div class="label">현재 — 글자가 작은 상태</div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg>
+            <h2 class="text-lg font-semibold">처방</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+            <button class="text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="space-y-3">
+          <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2"><span class="font-medium text-gray-900">2/22</span><span class="text-xs text-gray-400">트리거 주사</span></div>
+              <button class="text-xs text-gray-400">수정</button>
+            </div>
+            <div class="space-y-1.5">
+              <div class="flex items-center justify-between bg-white rounded px-3 py-2 border border-gray-100">
+                <span class="font-medium text-sm">퓨어곤 <span class="text-gray-400 text-[11px] ml-1">Puregon</span></span>
+                <span class="text-blue-600 text-sm">200IU</span>
+              </div>
+              <div class="flex items-center justify-between bg-white rounded px-3 py-2 border border-gray-100">
+                <span class="font-medium text-sm">가니렐릭스 <span class="text-gray-400 text-[11px] ml-1">Ganirelix</span></span>
+                <span class="text-blue-600 text-sm">0.25mg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===== 3A. 시안 A — 날짜 태그 + 큰 약 행 ===== -->
+    <div>
+      <div class="label">시안 A — 날짜 태그 분리 + 입력폼 크기 매칭</div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg>
+            <h2 class="text-lg font-semibold">처방</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+            <button class="text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg></button>
+          </div>
+        </div>
+
+        <div class="space-y-4">
+
+          <!-- 2/22 -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-[15px] font-semibold text-gray-900">2/22</span>
+                <span class="text-[13px] text-gray-400">트리거 주사</span>
+              </div>
+              <button class="text-[13px] text-gray-400 active:text-gray-600 px-2 py-1">수정</button>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span class="text-[15px] font-medium text-gray-900">
+                  퓨어곤 <span class="text-gray-400 text-[12px] ml-1">Puregon</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">200IU</span>
+              </div>
+              <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span class="text-[15px] font-medium text-gray-900">
+                  가니렐릭스 <span class="text-gray-400 text-[12px] ml-1">Ganirelix</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">0.25mg</span>
+              </div>
+              <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span class="text-[15px] font-medium text-gray-900">
+                  오비드렐 <span class="text-gray-400 text-[12px] ml-1">Ovidrel</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">250mcg</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 구분선 -->
+          <div class="border-t border-gray-100"></div>
+
+          <!-- 2/21 -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[15px] font-semibold text-gray-900">2/21</span>
+              <button class="text-[13px] text-gray-400 active:text-gray-600 px-2 py-1">수정</button>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span class="text-[15px] font-medium text-gray-900">
+                  퓨어곤 <span class="text-gray-400 text-[12px] ml-1">Puregon</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">200IU</span>
+              </div>
+              <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span class="text-[15px] font-medium text-gray-900">
+                  가니렐릭스 <span class="text-gray-400 text-[12px] ml-1">Ganirelix</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">0.25mg</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 구분선 -->
+          <div class="border-t border-gray-100"></div>
+
+          <!-- 2/20 -->
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-[15px] font-semibold text-gray-900">2/20</span>
+              <button class="text-[13px] text-gray-400 active:text-gray-600 px-2 py-1">수정</button>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span class="text-[15px] font-medium text-gray-900">
+                  퓨어곤 <span class="text-gray-400 text-[12px] ml-1">Puregon</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">175IU</span>
+              </div>
+              <div class="flex items-center justify-between bg-gray-50 rounded-xl px-4 py-3 border border-gray-100">
+                <span class="text-[15px] font-medium text-gray-900">
+                  가니렐릭스 <span class="text-gray-400 text-[12px] ml-1">Ganirelix</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">0.25mg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-2 px-2">
+        <p class="text-xs text-gray-500">변경: 카드 배경 제거 → 날짜 구분선으로 분리. 약 행 15px + py-3 (입력폼과 동일)</p>
+      </div>
+    </div>
+
+
+    <!-- ===== 3B. 시안 B — 날짜 왼쪽 바 + 카드 유지 ===== -->
+    <div>
+      <div class="label">시안 B — 날짜 왼쪽 강조 + 카드 크기 업</div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-pink-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 2 4 4"/><path d="m17 7 3-3"/><path d="M19 9 8.7 19.3c-1 1-2.5 1-3.4 0l-.6-.6c-1-1-1-2.5 0-3.4L15 5"/><path d="m9 11 4 4"/><path d="m5 19-3 3"/><path d="m14 4 6 6"/></svg>
+            <h2 class="text-lg font-semibold">처방</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="text-gray-400"><svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg></button>
+            <button class="text-gray-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg></button>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+
+          <!-- 2/22 -->
+          <div class="relative rounded-xl border border-gray-200 bg-gray-50 p-4 pl-7 overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-400 rounded-l-xl"></div>
+            <div class="flex items-center justify-between mb-3">
+              <div class="flex items-center gap-2">
+                <span class="text-[16px] font-bold text-gray-900">2/22</span>
+                <span class="text-[13px] text-gray-400">트리거 주사</span>
+              </div>
+              <button class="text-[13px] text-gray-400 active:text-gray-600 px-2 py-1">수정</button>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+                <span class="text-[15px] font-medium text-gray-900">
+                  퓨어곤 <span class="text-gray-400 text-[12px] ml-1">Puregon</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">200IU</span>
+              </div>
+              <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+                <span class="text-[15px] font-medium text-gray-900">
+                  가니렐릭스 <span class="text-gray-400 text-[12px] ml-1">Ganirelix</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">0.25mg</span>
+              </div>
+              <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+                <span class="text-[15px] font-medium text-gray-900">
+                  오비드렐 <span class="text-gray-400 text-[12px] ml-1">Ovidrel</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">250mcg</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2/21 -->
+          <div class="relative rounded-xl border border-gray-200 bg-gray-50 p-4 pl-7 overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-400 rounded-l-xl"></div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[16px] font-bold text-gray-900">2/21</span>
+              <button class="text-[13px] text-gray-400 active:text-gray-600 px-2 py-1">수정</button>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+                <span class="text-[15px] font-medium text-gray-900">
+                  퓨어곤 <span class="text-gray-400 text-[12px] ml-1">Puregon</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">200IU</span>
+              </div>
+              <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+                <span class="text-[15px] font-medium text-gray-900">
+                  가니렐릭스 <span class="text-gray-400 text-[12px] ml-1">Ganirelix</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">0.25mg</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2/20 -->
+          <div class="relative rounded-xl border border-gray-200 bg-gray-50 p-4 pl-7 overflow-hidden">
+            <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-orange-400 rounded-l-xl"></div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-[16px] font-bold text-gray-900">2/20</span>
+              <button class="text-[13px] text-gray-400 active:text-gray-600 px-2 py-1">수정</button>
+            </div>
+            <div class="space-y-2">
+              <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+                <span class="text-[15px] font-medium text-gray-900">
+                  퓨어곤 <span class="text-gray-400 text-[12px] ml-1">Puregon</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">175IU</span>
+              </div>
+              <div class="flex items-center justify-between bg-white rounded-lg px-4 py-3">
+                <span class="text-[15px] font-medium text-gray-900">
+                  가니렐릭스 <span class="text-gray-400 text-[12px] ml-1">Ganirelix</span>
+                </span>
+                <span class="text-[14px] text-blue-600 font-medium">0.25mg</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-2 px-2">
+        <p class="text-xs text-gray-500">변경: 카드 유지 + 왼쪽 오렌지 바로 날짜 구분. 날짜 16px 볼드, 약 15px, 용량 14px</p>
+      </div>
+    </div>
+
+
+    <!-- ===== 4a. 입력 폼 — 빈 상태 (지난 처방 가져오기) ===== -->
+    <div>
+      <div class="label">입력 폼 — 빈 상태</div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <!-- 날짜 -->
+        <div class="mb-4">
+          <label class="block text-sm mb-1">날짜</label>
+          <input type="date" value="2026-02-23" class="w-full px-3 py-3 border border-gray-300 rounded-xl text-[15px]">
+        </div>
+
+        <!-- 빈 상태: 지난 처방 가져오기 + 약 추가 -->
+        <div class="flex flex-col items-center gap-3 py-6">
+          <button class="w-full py-2.5 bg-orange-50 text-orange-600 rounded-lg text-sm font-medium border border-orange-200 flex items-center justify-center gap-1.5 active:bg-orange-100 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2"/></svg>
+            지난 처방 가져오기
+          </button>
+          <span class="text-xs text-gray-400">또는</span>
+          <button class="w-full py-2.5 border-2 border-dashed border-gray-200 rounded-lg text-sm text-gray-400 flex items-center justify-center gap-1 active:border-orange-300 active:text-orange-400 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            약 추가
+          </button>
+          <div class="flex items-center justify-end w-full mt-2">
+            <button class="px-4 py-2 text-sm text-gray-600 active:text-gray-900 transition-colors">취소</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===== 4b. 입력 폼 — 약 입력된 상태 ===== -->
+    <div>
+      <div class="label">입력 폼 — 약 입력된 상태</div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+        <!-- 날짜 -->
+        <div class="mb-4">
+          <label class="block text-sm mb-1">날짜</label>
+          <input type="date" value="2026-02-23" class="w-full px-3 py-3 border border-gray-300 rounded-xl text-[15px]">
+        </div>
+
+        <!-- 구분선 -->
+        <div class="border-t border-gray-100 mb-4"></div>
+
+        <!-- 처방약 - orange 칩 목록 -->
+        <div class="mb-4">
+          <label class="block text-sm mb-2">처방약</label>
+          <div class="space-y-2">
+            <!-- 약 1 -->
+            <div class="flex items-center justify-between bg-orange-50 border border-orange-200 rounded-xl px-4 py-3">
+              <span class="text-[15px] font-medium text-gray-900">
+                퓨어곤 <span class="text-gray-400 text-[12px] ml-1">Puregon</span>
+              </span>
+              <div class="flex items-center gap-2">
+                <span class="text-[14px] text-orange-600 font-medium">200IU</span>
+                <button class="text-gray-300 active:text-gray-500 p-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+            </div>
+            <!-- 약 2 -->
+            <div class="flex items-center justify-between bg-orange-50 border border-orange-200 rounded-xl px-4 py-3">
+              <span class="text-[15px] font-medium text-gray-900">
+                가니렐릭스 <span class="text-gray-400 text-[12px] ml-1">Ganirelix</span>
+              </span>
+              <div class="flex items-center gap-2">
+                <span class="text-[14px] text-orange-600 font-medium">0.25mg</span>
+                <button class="text-gray-300 active:text-gray-500 p-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- + 약 추가 버튼 -->
+          <button class="w-full mt-2.5 py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm text-gray-400 flex items-center justify-center gap-1 active:border-orange-300 active:text-orange-400 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+            약 추가
+          </button>
+        </div>
+
+        <!-- 메모 -->
+        <div class="mb-4">
+          <label class="block text-sm mb-1">메모</label>
+          <textarea class="w-full px-3 py-3 border border-gray-300 rounded-xl text-[15px]" rows="2" maxlength="30" placeholder="오늘 처방 관련 메모"></textarea>
+        </div>
+
+        <!-- 버튼 -->
+        <div class="flex items-center justify-between">
+          <button class="px-4 py-2.5 text-sm text-gray-500 active:text-gray-900 transition-colors">취소</button>
+          <button class="px-6 py-2.5 bg-orange-500 text-white rounded-xl text-sm font-medium active:bg-orange-600 transition-colors">저장</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ===== 5. 빈 사이클 목록 ===== -->
+    <div>
+      <div class="label">빈 사이클 목록 — 첫 화면</div>
+
+      <div class="text-center py-16 text-gray-500">
+        <p class="text-lg font-medium">당신의 착붙는 여정</p>
+        <p class="text-sm mt-2">한 걸음씩, 사이클로그와 기록을 시작해보세요.</p>
+      </div>
+    </div>
+
+
+    <!-- ===== 6. 수정/배양 아이콘 변경 시안 ===== -->
+    <div>
+      <div class="label">수정 · 배양 아이콘 변경 시안</div>
+
+      <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 space-y-8">
+
+        <!-- 현재 아이콘 -->
+        <div>
+          <div class="text-xs text-gray-400 font-semibold mb-3">현재</div>
+          <div class="flex gap-6">
+            <div class="flex items-center gap-2 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <!-- TestTubes (현재 수정) -->
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8l-4 4"/><path d="M14 14 6 6"/><path d="m16 2-6 6"/><path d="M4 14v4a2 2 0 0 0 2 2h12"/><path d="m14 4-2 2"/></svg>
+              <span class="text-sm font-semibold text-gray-800">수정</span>
+              <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium">2개</span>
+            </div>
+            <div class="flex items-center gap-2 px-4 py-3 bg-amber-50 rounded-xl border border-amber-100">
+              <!-- FlaskConical (현재 배양) -->
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>
+              <span class="text-sm font-semibold text-gray-800">배양</span>
+              <span class="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full font-medium">5일 2개</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 구분선 -->
+        <div class="border-t border-gray-100"></div>
+
+        <!-- 수정 아이콘 후보 (ICSI 느낌) -->
+        <div>
+          <div class="text-xs text-gray-400 font-semibold mb-3">수정 아이콘 후보 — ICSI (정밀 주입) 느낌</div>
+          <div class="grid grid-cols-2 gap-3">
+
+            <!-- A. Target -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">A. Target — 난자 타겟팅</div>
+              </div>
+            </div>
+
+            <!-- B. CircleDot -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">B. CircleDot — 난자+정자 주입</div>
+              </div>
+            </div>
+
+            <!-- C. Crosshair -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">C. Crosshair — 정밀 조준</div>
+              </div>
+            </div>
+
+            <!-- D. LocateFixed -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">D. LocateFixed — ICSI 포커스</div>
+              </div>
+            </div>
+
+            <!-- E. Dna (기존) -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 15c6.667-6 13.333 0 20-6"/><path d="M9 22c1.798-1.998 2.518-3.995 2.807-5.993"/><path d="M15 2c-1.798 1.998-2.518 3.995-2.807 5.993"/><path d="m17 6-2.5-2.5"/><path d="m14 8-1-1"/><path d="m7 18 2.5 2.5"/><path d="m3.5 14.5.5.5"/><path d="m20 9 .5.5"/><path d="m6.5 12.5 1 1"/><path d="m16.5 10.5 1 1"/><path d="m10 16 1.5 1.5"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">E. Dna — 유전자 결합</div>
+              </div>
+            </div>
+
+            <!-- F. Sparkles (기존) -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">F. Sparkles — 수정 순간</div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 구분선 -->
+          <div class="border-t border-dashed border-blue-200 my-3"></div>
+
+          <div class="text-xs text-blue-400 font-semibold mb-3">수정 아이콘 후보 — 난자+정자 이미지 기반 추가</div>
+          <div class="grid grid-cols-2 gap-3">
+
+            <!-- G. CircleDotDashed -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-200">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.1 2.18a9.93 9.93 0 0 1 3.8 0"/><path d="M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7"/><path d="M21.82 10.1a9.93 9.93 0 0 1 0 3.8"/><path d="M20.29 17.6a9.95 9.95 0 0 1-2.7 2.69"/><path d="M13.9 21.82a9.94 9.94 0 0 1-3.8 0"/><path d="M6.4 20.29a9.95 9.95 0 0 1-2.69-2.7"/><path d="M2.18 13.9a9.93 9.93 0 0 1 0-3.8"/><path d="M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69"/><circle cx="12" cy="12" r="1"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">G. CircleDotDashed — 세포막+정자</div>
+              </div>
+            </div>
+
+            <!-- H. Radar -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-200">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"/><path d="M4 6h.01"/><path d="M2.29 9.62A10 10 0 1 0 21.31 8.35"/><path d="M16.24 7.76A6 6 0 1 0 8.23 16.67"/><path d="M12 18h.01"/><path d="M17.99 11.66A6 6 0 0 1 15.77 16.67"/><circle cx="12" cy="12" r="2"/><path d="m13.41 10.59 5.66-5.66"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">H. Radar — 피펫 진입 느낌</div>
+              </div>
+            </div>
+
+            <!-- I. Orbit -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-blue-50 rounded-xl border border-blue-200">
+              <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><path d="M10.4 21.9a10 10 0 0 0 9.941-15.416"/><path d="M13.5 2.1a10 10 0 0 0-9.841 15.416"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">수정</span>
+                <span class="text-xs bg-blue-100 text-blue-600 px-2 py-0.5 rounded-full font-medium ml-1">2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">I. Orbit — 정자 접근 궤도</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 구분선 -->
+        <div class="border-t border-gray-100"></div>
+
+        <!-- 배양 아이콘 후보 -->
+        <div>
+          <div class="text-xs text-gray-400 font-semibold mb-3">배양 아이콘 후보</div>
+          <div class="grid grid-cols-2 gap-3">
+
+            <!-- A. Sprout -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-amber-50 rounded-xl border border-amber-100">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">배양</span>
+                <span class="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full font-medium ml-1">5일 2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">A. Sprout — 새싹, 성장</div>
+              </div>
+            </div>
+
+            <!-- B. Timer -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-amber-50 rounded-xl border border-amber-100">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" x2="14" y1="2" y2="2"/><line x1="12" x2="15" y1="14" y2="11"/><circle cx="12" cy="14" r="8"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">배양</span>
+                <span class="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full font-medium ml-1">5일 2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">B. Timer — 기다림</div>
+              </div>
+            </div>
+
+            <!-- C. Microscope -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-amber-50 rounded-xl border border-amber-100">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">배양</span>
+                <span class="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full font-medium ml-1">5일 2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">C. Microscope — 관찰</div>
+              </div>
+            </div>
+
+            <!-- D. Egg -->
+            <div class="flex items-center gap-3 px-4 py-3 bg-amber-50 rounded-xl border border-amber-100">
+              <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c6.23-.05 7.87-5.57 7.5-10-.36-4.34-3.95-9.96-7.5-10-3.55.04-7.14 5.66-7.5 10-.37 4.43 1.27 9.95 7.5 10z"/></svg>
+              <div>
+                <span class="text-sm font-semibold text-gray-800">배양</span>
+                <span class="text-xs bg-amber-100 text-amber-600 px-2 py-0.5 rounded-full font-medium ml-1">5일 2개</span>
+                <div class="text-[10px] text-gray-400 mt-0.5">D. Egg — 배아</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 추천 조합 -->
+        <div class="border-t border-gray-100 pt-4">
+          <div class="text-xs text-gray-400 font-semibold mb-3">추천 조합 미리보기</div>
+          <div class="space-y-3">
+            <!-- 추천 1: CircleDot + Sprout -->
+            <div class="flex items-center gap-4 px-4 py-3 bg-gray-50 rounded-xl">
+              <span class="text-[10px] text-gray-400 w-6">1</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="1"/></svg>
+                <span class="text-sm font-medium">수정</span>
+              </div>
+              <span class="text-gray-300">+</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+                <span class="text-sm font-medium">배양</span>
+              </div>
+              <span class="text-[10px] text-gray-400 ml-auto">CircleDot + Sprout</span>
+            </div>
+
+            <!-- 추천 2: LocateFixed + Microscope -->
+            <div class="flex items-center gap-4 px-4 py-3 bg-gray-50 rounded-xl">
+              <span class="text-[10px] text-gray-400 w-6">2</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="2" x2="5" y1="12" y2="12"/><line x1="19" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="5"/><line x1="12" x2="12" y1="19" y2="22"/><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="3"/></svg>
+                <span class="text-sm font-medium">수정</span>
+              </div>
+              <span class="text-gray-300">+</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 18h8"/><path d="M3 22h18"/><path d="M14 22a7 7 0 1 0 0-14h-1"/><path d="M9 14h2"/><path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z"/><path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3"/></svg>
+                <span class="text-sm font-medium">배양</span>
+              </div>
+              <span class="text-[10px] text-gray-400 ml-auto">LocateFixed + Microscope</span>
+            </div>
+
+            <!-- 추천 3: Target + Egg -->
+            <div class="flex items-center gap-4 px-4 py-3 bg-gray-50 rounded-xl">
+              <span class="text-[10px] text-gray-400 w-6">3</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                <span class="text-sm font-medium">수정</span>
+              </div>
+              <span class="text-gray-300">+</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c6.23-.05 7.87-5.57 7.5-10-.36-4.34-3.95-9.96-7.5-10-3.55.04-7.14 5.66-7.5 10-.37 4.43 1.27 9.95 7.5 10z"/></svg>
+                <span class="text-sm font-medium">배양</span>
+              </div>
+              <span class="text-[10px] text-gray-400 ml-auto">Target + Egg</span>
+            </div>
+
+            <!-- 추천 4: Crosshair + Sprout -->
+            <div class="flex items-center gap-4 px-4 py-3 bg-gray-50 rounded-xl">
+              <span class="text-[10px] text-gray-400 w-6">4</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="22" x2="18" y1="12" y2="12"/><line x1="6" x2="2" y1="12" y2="12"/><line x1="12" x2="12" y1="6" y2="2"/><line x1="12" x2="12" y1="22" y2="18"/></svg>
+                <span class="text-sm font-medium">수정</span>
+              </div>
+              <span class="text-gray-300">+</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+                <span class="text-sm font-medium">배양</span>
+              </div>
+              <span class="text-[10px] text-gray-400 ml-auto">Crosshair + Sprout</span>
+            </div>
+
+            <!-- 추천 5: CircleDotDashed + Egg -->
+            <div class="flex items-center gap-4 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <span class="text-[10px] text-blue-400 w-6">5</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.1 2.18a9.93 9.93 0 0 1 3.8 0"/><path d="M17.6 3.71a9.95 9.95 0 0 1 2.69 2.7"/><path d="M21.82 10.1a9.93 9.93 0 0 1 0 3.8"/><path d="M20.29 17.6a9.95 9.95 0 0 1-2.7 2.69"/><path d="M13.9 21.82a9.94 9.94 0 0 1-3.8 0"/><path d="M6.4 20.29a9.95 9.95 0 0 1-2.69-2.7"/><path d="M2.18 13.9a9.93 9.93 0 0 1 0-3.8"/><path d="M3.71 6.4a9.95 9.95 0 0 1 2.7-2.69"/><circle cx="12" cy="12" r="1"/></svg>
+                <span class="text-sm font-medium">수정</span>
+              </div>
+              <span class="text-gray-300">+</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c6.23-.05 7.87-5.57 7.5-10-.36-4.34-3.95-9.96-7.5-10-3.55.04-7.14 5.66-7.5 10-.37 4.43 1.27 9.95 7.5 10z"/></svg>
+                <span class="text-sm font-medium">배양</span>
+              </div>
+              <span class="text-[10px] text-blue-400 ml-auto">CircleDotDashed + Egg</span>
+            </div>
+
+            <!-- 추천 6: Orbit + Sprout -->
+            <div class="flex items-center gap-4 px-4 py-3 bg-blue-50 rounded-xl border border-blue-100">
+              <span class="text-[10px] text-blue-400 w-6">6</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><path d="M10.4 21.9a10 10 0 0 0 9.941-15.416"/><path d="M13.5 2.1a10 10 0 0 0-9.841 15.416"/></svg>
+                <span class="text-sm font-medium">수정</span>
+              </div>
+              <span class="text-gray-300">+</span>
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg>
+                <span class="text-sm font-medium">배양</span>
+              </div>
+              <span class="text-[10px] text-blue-400 ml-auto">Orbit + Sprout</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -26,8 +26,8 @@ export default function OAuthKakaoCallback() {
     api.kakaoLogin(code)
       .then((result) => {
         localStorage.setItem('auth_token', result.token);
-        // AuthContext가 토큰을 감지하도록 페이지 전체 이동
-        window.location.href = '/';
+        // 신규 유저는 약관 동의 페이지로, 기존 유저는 메인으로
+        window.location.href = result.isNewUser ? '/terms' : '/';
       })
       .catch((err) => {
         setError(err.message || '카카오 로그인에 실패했습니다.');
@@ -36,7 +36,7 @@ export default function OAuthKakaoCallback() {
   }, [searchParams, navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-purple-50 flex items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 flex items-center justify-center">
       {error ? (
         <div className="text-center">
           <p className="text-red-500 mb-2">{error}</p>
@@ -44,7 +44,7 @@ export default function OAuthKakaoCallback() {
         </div>
       ) : (
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-pink-300 border-t-pink-600 rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-8 h-8 border-4 border-orange-300 border-t-orange-500 rounded-full animate-spin mx-auto mb-4" />
           <p className="text-gray-600">카카오 로그인 처리중...</p>
         </div>
       )}

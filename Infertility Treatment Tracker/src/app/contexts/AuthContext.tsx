@@ -11,11 +11,9 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, nickname?: string, birthDate?: string, phone?: string, marketing?: { marketingEmail: boolean; marketingSms: boolean; marketingPush: boolean }) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
-  deleteAccount: (password?: string) => Promise<void>;
+  deleteAccount: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -37,18 +35,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const result = await api.login(email, password);
-    localStorage.setItem('auth_token', result.token);
-    setUser(result.user);
-  };
-
-  const signup = async (email: string, password: string, nickname?: string, birthDate?: string, phone?: string, marketing?: { marketingEmail: boolean; marketingSms: boolean; marketingPush: boolean }) => {
-    const result = await api.signup(email, password, nickname, birthDate, phone, marketing);
-    localStorage.setItem('auth_token', result.token);
-    setUser(result.user);
-  };
-
   const logout = () => {
     localStorage.removeItem('auth_token');
     setUser(null);
@@ -59,14 +45,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(updated);
   };
 
-  const deleteAccount = async (password?: string) => {
-    await api.deleteAccount(password);
+  const deleteAccount = async () => {
+    await api.deleteAccount();
     localStorage.removeItem('auth_token');
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, signup, logout, refreshUser, deleteAccount }}>
+    <AuthContext.Provider value={{ user, loading, logout, refreshUser, deleteAccount }}>
       {children}
     </AuthContext.Provider>
   );

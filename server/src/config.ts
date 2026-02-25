@@ -6,6 +6,7 @@ export const config = {
   jwtSecret: process.env.JWT_SECRET || 'dev-secret',
   port: parseInt(process.env.PORT || '3001', 10),
   kakaoRestApiKey: process.env.KAKAO_REST_API_KEY || '',
+  kakaoClientSecret: process.env.KAKAO_CLIENT_SECRET || '',
   kakaoRedirectUri: process.env.KAKAO_REDIRECT_URI || 'http://localhost:5173/oauth/kakao',
   googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',

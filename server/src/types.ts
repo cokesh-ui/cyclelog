@@ -53,6 +53,8 @@ export interface Cycle {
   id: string;
   startDate: string;
   cycleNumber: number;
+  cycleType: 'standard' | 'transfer_only';
+  injectionSkipped: boolean;
   subtitle?: string;
   title?: string;
   injections: InjectionRecord[];

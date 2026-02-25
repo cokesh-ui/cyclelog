@@ -4,8 +4,8 @@
   "description": "난임 시술 과정을 기록하고 관리하는 앱",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fdf2f8",
-  "theme_color": "#db2777",
+  "background_color": "#FFF8F0",
+  "theme_color": "#F57C00",
   "orientation": "portrait",
   "icons": [
     {

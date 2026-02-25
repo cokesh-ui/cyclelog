@@ -18,7 +18,7 @@ export function BottomNav() {
           to="/"
           className={`flex-1 flex flex-col items-center gap-1 py-3 transition-all ${
             isActive('/')
-              ? 'text-pink-600 bg-pink-50'
+              ? 'text-orange-500 bg-orange-50'
               : 'text-gray-400'
           }`}
         >
@@ -29,7 +29,7 @@ export function BottomNav() {
           to="/current"
           className={`flex-1 flex flex-col items-center gap-1 py-3 transition-all ${
             isActive('/current')
-              ? 'text-pink-600 bg-pink-50'
+              ? 'text-orange-500 bg-orange-50'
               : 'text-gray-400'
           }`}
         >

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>사진으로 입력 시안</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(to bottom, #fff7ed, #fffbeb); min-height: 100vh; padding: 20px; }
+
+  h3 { font-size: 14px; color: #666; margin-bottom: 12px; text-align: center; }
+  .scenario { background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); border: 1px solid #e5e7eb; }
+  .scenario-label { font-size: 11px; color: white; background: #f97316; display: inline-block; padding: 2px 8px; border-radius: 99px; margin-bottom: 16px; }
+  .scenario-label.blue { background: #6366f1; }
+  .scenario-label.green { background: #16a34a; }
+
+  .section-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .section-header .icon { width: 20px; height: 20px; color: #ec4899; }
+  .section-header h2 { font-size: 18px; font-weight: 600; }
+
+  .date-input { width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 15px; margin-bottom: 16px; }
+
+  .photo-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #3b82f6, #6366f1);
+    color: white; border: none; border-radius: 12px;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;
+  }
+  .photo-btn .sub { font-size: 11px; font-weight: 400; opacity: 0.8; }
+
+  .copy-btn {
+    width: 100%; padding: 12px;
+    background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; border-radius: 12px;
+    font-size: 14px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+  }
+
+  .manual-btn {
+    width: 100%; padding: 12px;
+    background: white; color: #9ca3af; border: 2px dashed #e5e7eb; border-radius: 12px;
+    font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+  }
+
+  .photo-btn-small {
+    width: 100%; padding: 10px;
+    background: white; color: #6366f1; border: 1px solid #c7d2fe; border-radius: 12px;
+    font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+  }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 12px 0; }
+  .divider-line { flex: 1; height: 1px; background: #e5e7eb; }
+  .divider-text { font-size: 12px; color: #9ca3af; }
+
+  .cancel-btn { padding: 8px 16px; font-size: 14px; color: #6b7280; background: none; border: none; cursor: pointer; }
+  .footer { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+  /* 바텀시트 */
+  .bottomsheet-wrapper {
+    position: relative; background: rgba(0,0,0,0.3); border-radius: 16px;
+    margin-bottom: 24px; overflow: hidden;
+  }
+  .bottomsheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: white; border-radius: 16px 16px 0 0;
+    padding: 0 20px 24px; box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  }
+  .handle { display: flex; justify-content: center; padding: 12px 0 8px; }
+  .handle-bar { width: 40px; height: 4px; background: #d1d5db; border-radius: 99px; }
+  .sheet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .sheet-header h4 { font-size: 17px; font-weight: 700; }
+  .close-btn { background: none; border: none; font-size: 20px; color: #9ca3af; cursor: pointer; padding: 4px; }
+
+  .tab-row { display: flex; gap: 0; margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; }
+  .tab { flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all 0.2s; }
+  .tab.active-photo { background: linear-gradient(135deg, #3b82f6, #6366f1); color: white; }
+  .tab.active-manual { background: #f97316; color: white; }
+  .tab.inactive { background: #f9fafb; color: #9ca3af; }
+
+  .upload-area {
+    border: 2px dashed #c7d2fe; border-radius: 16px;
+    padding: 32px 20px; text-align: center; background: #f5f3ff; cursor: pointer;
+  }
+  .upload-area .icon { font-size: 40px; margin-bottom: 8px; }
+  .upload-area .title { font-size: 15px; font-weight: 600; color: #4f46e5; margin-bottom: 4px; }
+  .upload-area .desc { font-size: 12px; color: #9ca3af; }
+
+  /* 날짜별 인식 결과 */
+  .result-card {
+    background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 12px;
+    padding: 16px; margin-bottom: 12px;
+  }
+  .result-badge { font-size: 11px; color: #16a34a; background: #dcfce7; padding: 2px 8px; border-radius: 99px; display: inline-block; margin-bottom: 12px; font-weight: 600; }
+
+  .date-group { margin-bottom: 14px; }
+  .date-group:last-child { margin-bottom: 0; }
+  .date-label { font-size: 14px; font-weight: 700; color: #374151; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+  .date-label .count { font-size: 11px; color: #6b7280; font-weight: 400; }
+
+  .result-med {
+    display: flex; align-items: center; justify-content: space-between;
+    background: white; border: 1px solid #d1d5db; border-radius: 10px;
+    padding: 10px 14px; margin-bottom: 6px; cursor: pointer; transition: all 0.15s;
+  }
+  .result-med:active { background: #f3f4f6; }
+  .result-med .name { font-size: 14px; font-weight: 500; }
+  .result-med .name .en { font-size: 11px; color: #9ca3af; margin-left: 4px; }
+  .result-med .right { display: flex; align-items: center; gap: 8px; }
+  .result-med .dose { font-size: 13px; color: #2563eb; font-weight: 600; }
+  .result-med .edit-icon { font-size: 12px; color: #9ca3af; }
+
+  .date-divider { height: 1px; background: #e5e7eb; margin: 12px 0; }
+
+  .confirm-btn {
+    width: 100%; padding: 14px;
+    background: #f97316; color: white; border: none; border-radius: 12px;
+    font-size: 15px; font-weight: 600; cursor: pointer; margin-top: 8px;
+  }
+
+  .input-field { width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 16px; outline: none; margin-bottom: 12px; }
+  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .chip { padding: 6px 12px; background: #f3f4f6; border-radius: 8px; font-size: 13px; color: #4b5563; border: none; cursor: pointer; }
+  .chip .dim { color: #9ca3af; }
+  .dose-row { display: flex; gap: 8px; margin-bottom: 20px; }
+  .dose-row input { flex: 1; }
+  .dose-row select { padding: 14px 12px; border: 1px solid #d1d5db; border-radius: 12px; font-size: 15px; background: white; }
+  .add-btn { width: 100%; padding: 14px; background: #f97316; color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; }
+
+  .flow-arrow { text-align: center; font-size: 24px; color: #c7d2fe; margin: -8px 0 16px; }
+
+  /* A 결과 반영 후 */
+  .filled-med {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #fff7ed; border: 1px solid #fed7aa; border-radius: 12px;
+    padding: 12px 16px; margin-bottom: 8px;
+  }
+  .filled-med .name { font-size: 15px; font-weight: 500; }
+  .filled-med .name .en { font-size: 12px; color: #9ca3af; margin-left: 4px; }
+  .filled-med .right { display: flex; align-items: center; gap: 8px; }
+  .filled-med .dose { font-size: 14px; color: #ea580c; font-weight: 600; }
+  .filled-med .x-btn { color: #d1d5db; font-size: 16px; cursor: pointer; background: none; border: none; }
+</style>
+</head>
+<body>
+
+<h3>📷 사진으로 입력 — 전체 플로우</h3>
+
+<!-- ========== A: 첫 입력 ========== -->
+<div class="scenario">
+  <span class="scenario-label">A. 첫 입력 (주사 기록 0개)</span>
+  <div class="section-header">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <h2>처방</h2>
+  </div>
+  <input type="date" class="date-input" value="2025-02-24">
+  <button class="photo-btn">
+    <span>📷</span>
+    <span>안내문 사진으로 입력<br><span class="sub">촬영하면 날짜별 약·용량이 자동 입력돼요</span></span>
+  </button>
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-text">또는</span>
+    <div class="divider-line"></div>
+  </div>
+  <button class="manual-btn"><span>＋</span> 직접 입력</button>
+  <div class="footer"><button class="cancel-btn">취소</button></div>
+</div>
+
+<div class="flow-arrow">↓ 사진 촬영 후</div>
+
+<!-- ========== D: 날짜별 인식 결과 ========== -->
+<div class="bottomsheet-wrapper" style="min-height: 600px;">
+  <span class="scenario-label blue" style="position:absolute;top:12px;left:12px;z-index:1">D. 인식 결과 — 날짜별</span>
+  <div class="bottomsheet">
+    <div class="handle"><div class="handle-bar"></div></div>
+    <div class="sheet-header">
+      <h4>인식 결과</h4>
+      <button class="close-btn">✕</button>
+    </div>
+
+    <div class="result-card">
+      <div style="margin-bottom:12px;">
+        <span class="result-badge">✓ 5일치 인식 완료</span>
+        <div style="font-size:12px; color:#9ca3af; margin-top:6px;">잘못 입력된 내용이 있나요? 터치해서 수정해 보세요</div>
+      </div>
+
+      <!-- 2/24~ 같은 처방 묶음 -->
+      <div class="date-group">
+        <div class="date-label">2/24</div>
+        <div class="result-med">
+          <span class="name">퓨어곤 <span class="en">Puregon</span></span>
+          <span class="right">
+            <span class="dose">300IU</span>
+
+          </span>
+        </div>
+      </div>
+
+      <div class="date-divider"></div>
+
+      <!-- 2/27~ 약 추가됨 -->
+      <div class="date-group">
+        <div class="date-label">2/27</div>
+        <div class="result-med">
+          <span class="name">퓨어곤 <span class="en">Puregon</span></span>
+          <span class="right">
+            <span class="dose">300IU</span>
+
+          </span>
+        </div>
+        <div class="result-med">
+          <span class="name">가니렐릭스 <span class="en">Ganirelix</span></span>
+          <span class="right">
+            <span class="dose">0.25mg</span>
+
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <button class="confirm-btn">5일치 한번에 추가하기</button>
+  </div>
+</div>
+
+<div class="flow-arrow">↓ 틀린 약을 탭하면</div>
+
+<!-- ========== E2: 탭해서 수정 (직접입력에 값 미리 채움) ========== -->
+<div class="bottomsheet-wrapper" style="min-height: 500px;">
+  <span class="scenario-label green" style="position:absolute;top:12px;left:12px;z-index:1">E. 수정 — 값 미리 채워진 직접입력</span>
+  <div class="bottomsheet">
+    <div class="handle"><div class="handle-bar"></div></div>
+    <div class="sheet-header">
+      <h4>약 수정 <span style="font-size:13px;font-weight:400;color:#9ca3af;">2/24</span></h4>
+      <button class="close-btn">✕</button>
+    </div>
+
+    <div>
+      <div style="font-size:14px; margin-bottom:4px;">약 이름</div>
+      <input type="text" class="input-field" value="퓨어곤" style="border-color:#f97316;">
+      <div style="font-size:14px; margin-bottom:4px;">용량</div>
+      <div class="dose-row">
+        <input type="text" class="input-field" value="300" style="border-color:#f97316;" inputmode="decimal">
+        <select class="dose-row select">
+          <option selected>IU</option>
+          <option>mg</option>
+          <option>mcg</option>
+        </select>
+      </div>
+      <button class="add-btn">수정 완료</button>
+    </div>
+  </div>
+</div>
+
+<div class="flow-arrow">↓ "한번에 추가하기" 후</div>
+
+<!-- ========== A2: 결과 반영된 폼 ========== -->
+<div class="scenario">
+  <span class="scenario-label green">A-2. 결과 반영 후 처방 화면</span>
+  <div class="section-header">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <h2>처방</h2>
+  </div>
+
+  <!-- 2/24~ 같은 처방 묶음 -->
+  <div style="margin-bottom:16px;">
+    <div style="font-size:15px; font-weight:600; margin-bottom:8px;">2/24</div>
+    <div class="filled-med">
+      <span class="name">퓨어곤 <span class="en">Puregon</span></span>
+      <span class="right"><span class="dose">300IU</span><button class="x-btn">✕</button></span>
+    </div>
+  </div>
+
+  <div style="height:1px;background:#f3f4f6;margin-bottom:16px;"></div>
+
+  <!-- 2/27~ 약 추가됨 -->
+  <div style="margin-bottom:16px;">
+    <div style="font-size:15px; font-weight:600; margin-bottom:8px;">2/27</div>
+    <div class="filled-med">
+      <span class="name">퓨어곤 <span class="en">Puregon</span></span>
+      <span class="right"><span class="dose">300IU</span><button class="x-btn">✕</button></span>
+    </div>
+    <div class="filled-med">
+      <span class="name">가니렐릭스 <span class="en">Ganirelix</span></span>
+      <span class="right"><span class="dose">0.25mg</span><button class="x-btn">✕</button></span>
+    </div>
+  </div>
+</div>
+
+<div style="height:32px"></div>
+
+<!-- ========== B: 2번째 기록 ========== -->
+<h3 style="margin-top:16px;">📋 2번째 이후 기록 (변경 없음)</h3>
+
+<div class="scenario">
+  <span class="scenario-label">B. 같은 사이클 2번째 기록</span>
+  <div class="section-header">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#ec4899" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <h2>처방</h2>
+  </div>
+  <input type="date" class="date-input" value="2025-02-27">
+  <button class="copy-btn"><span>📋</span> 지난 처방 가져오기</button>
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-text">또는</span>
+    <div class="divider-line"></div>
+  </div>
+  <button class="photo-btn-small"><span>📷</span> 안내문 사진으로 입력</button>
+  <div style="height: 8px"></div>
+  <button class="manual-btn"><span>＋</span> 직접 입력</button>
+  <div class="footer"><button class="cancel-btn">취소</button></div>
+</div>
+
+</body>
+</html>
