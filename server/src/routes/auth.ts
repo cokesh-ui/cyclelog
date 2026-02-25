@@ -1,8 +1,16 @@
 import { Router } from 'express';
 import * as authService from '../services/auth.service.js';
 import { authMiddleware, AuthRequest } from '../middleware/auth.js';
+import { config } from '../config.js';
 
 export const authRouter = Router();
+
+authRouter.get('/kakao-config', (_req, res) => {
+  res.json({
+    clientId: config.kakaoRestApiKey,
+    redirectUri: config.kakaoRedirectUri,
+  });
+});
 
 authRouter.post('/kakao', async (req, res) => {
   try {

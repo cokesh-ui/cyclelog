@@ -1,9 +1,18 @@
-const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY || '';
-const KAKAO_REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI || 'http://localhost:5173/oauth/kakao';
+import { useEffect, useState } from 'react';
 
 export default function Login() {
+  const [kakaoConfig, setKakaoConfig] = useState<{ clientId: string; redirectUri: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/kakao-config')
+      .then(res => res.json())
+      .then(setKakaoConfig)
+      .catch(() => {});
+  }, []);
+
   const handleKakaoLogin = () => {
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${encodeURIComponent(KAKAO_REDIRECT_URI)}&response_type=code`;
+    if (!kakaoConfig) return;
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoConfig.clientId}&redirect_uri=${encodeURIComponent(kakaoConfig.redirectUri)}&response_type=code`;
     window.location.href = kakaoAuthUrl;
   };
 
@@ -31,6 +40,7 @@ export default function Login() {
 
         <button
           onClick={handleKakaoLogin}
+          disabled={!kakaoConfig}
           className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-colors"
           style={{ backgroundColor: '#FEE500', color: '#191919' }}
         >
